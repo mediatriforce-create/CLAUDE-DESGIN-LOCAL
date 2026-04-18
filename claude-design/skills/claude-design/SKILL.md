@@ -69,7 +69,7 @@ Isso define a estrutura de seções automaticamente (ver Seção 27).
 
 ### Q4 — Framework de copy?
 
-Define como cada seção vai ser escrita (ver Seção 28).
+Define como cada seção vai ser escrita (ver Seções 28 e 30).
 
 ```
 1  PAS — Problema, Agitação, Solução (dor visceral → alívio)
@@ -80,6 +80,8 @@ Define como cada seção vai ser escrita (ver Seção 28).
 6  FAB — Features → Advantages → Benefits (produto físico)
 7  4Ps — Picture, Promise, Prove, Push (premium)
 8  Você decide o melhor para o contexto
+9  FECCHIO MIND — copy de resposta direta com psicologia de persuasão
+   (Recomendado para: qualquer LP que precisa VENDER, não só apresentar)
 ```
 
 ---
@@ -1422,3 +1424,91 @@ Toda LP deve combinar 1 opção de cada eixo. Combinando os eixos: mais de 7.500
   textura: noise-grain
 -->
 ```
+
+---
+
+## 30. Fecchio Mind — Integração com Claude Design
+
+Quando Q4 = opção 9 (Fecchio Mind), executar o processo abaixo **antes de escrever qualquer HTML**. O copy nasce primeiro, depois o design serve o copy — nunca o contrário.
+
+### Passo 1 — Definir o CSI (Central Selling Idea)
+
+Em UMA frase antes de qualquer coisa:
+> "Que resultado específico e tangível esse produto entrega, para quem, em quanto tempo, removendo qual obstáculo?"
+
+Exemplo:
+> "Para mães que trabalham e não conseguem cozinhar saudável durante a semana, um serviço que entrega marmitas low-carb frescas em 30 minutos, sem precisar de assinatura."
+
+Tudo que vai para o HTML serve ao CSI ou sai.
+
+---
+
+### Passo 2 — Gerar 10 ângulos, filtrar para 3
+
+Antes de escrever qualquer headline, gerar 10 ângulos distintos:
+- Curiosidade / segredo interno
+- Medo de perda / custo de não agir
+- Ganho rápido com prazo específico
+- Prova social de persona semelhante
+- Reversão de crença dominante
+- Mecanismo novo (o COMO diferente)
+- Contra-intuitivo (oposto do que o mercado ensina)
+- Identidade (quem o avatar quer ser visto)
+- Inimigo nomeado (erro que todos cometem)
+- Especificidade extrema de persona
+
+Filtrar com Yeah-Sure Test: eliminar qualquer um que possa gerar "ah claro" sem prova imediata.
+Escolher os 3 melhores. O headline do hero usa o mais forte.
+
+---
+
+### Passo 3 — Copy por seção com Fecchio
+
+| Seção | Princípio Fecchio | Como aplicar |
+|---|---|---|
+| **Hero headline** | 4U + CSI | Útil + Urgente + Único + Ultra-específico. Número real, prazo real, para quem específico |
+| **Hero subhead** | BAB condensado | "Antes [dor em palavras do avatar] / Depois [transformação concreta e sensorial]" |
+| **Hero CTA** | Verbo + resultado | "Quero [resultado específico]" — nunca "Saiba mais" ou "Comece" |
+| **Prova imediata** (logo bar / stats) | Social Proof + Ancoragem | Número específico antes de qualquer argumento. "267 clientes em 14 estados" não "Muitos clientes" |
+| **Problema** | PAS — agitação em 3 dimensões | Consequências práticas + emocionais + de identidade. Nível mais profundo disponível |
+| **Mecanismo** | Inimigo + diferencial nomeado | Nomear o erro que todos cometem + por que este método é diferente. Dar nome memorável ao mecanismo |
+| **Features / benefícios** | FAB rigoroso | Feature → Advantage → Benefit. Nunca parar na feature. "Bateria 48h" → "carrega o dia" → "você nunca para" |
+| **Como funciona** | Goal-Gradient Effect | 3 passos simples, numerados, com verbos de ação. Cria sensação de proximidade do resultado |
+| **Depoimentos** | Hierarquia de Bencivenga | Prova emocional (história) + social (nome + número) + lógica (detalhe que só quem viveu sabe). "Mudou minha vida" = lixo |
+| **Oferta / pricing** | Ancoragem + D-STACKS | Mostrar valor acumulado antes de revelar preço. Preço nunca aparece primeiro |
+| **Garantia** | Sem fricção = Remove Regret Aversion | Sem condições. "Se em 30 dias não serviu, devolvo. Sem perguntas." |
+| **CTA final** | Aversão à perda + urgência real | "Cada dia sem isso você [custo específico]" + urgência com motivo real |
+| **FAQ** | Objeções reais respondidas | Mapear as 5-7 objeções mais comuns e responder com prova, não com argumento |
+
+---
+
+### Regras absolutas Fecchio no HTML
+
+**Nunca escrever:**
+- "Soluções inovadoras", "ecossistema", "alavancar", "potencializar", "transformação" (sem especificar qual)
+- "Aprenda", "descubra", "domine" — são verbos de curso, não de resposta direta
+- "Muitos clientes satisfeitos" — sem número específico é lixo
+- Promessa sem mecanismo que a sustente
+- Headline genérico que qualquer concorrente poderia usar
+- Travessões em headings ou CTAs
+
+**Sempre escrever:**
+- Números ímpares e específicos ("6.312 usuários" não "6.000")
+- Resultados com prazo ("em 21 dias" não "rapidamente")
+- Copy na voz do avatar, não na voz do produto
+- Cada claim tem prova imediata na mesma seção
+- O final da página termina em alta — nunca em dúvida
+
+---
+
+### Verificação antes de gerar o HTML
+
+Antes de escrever a primeira tag, responder mentalmente:
+
+1. **CSI está definido?** Se não, não começar.
+2. **Headline passou no Yeah-Sure Test?** Se sim ao "ah claro", reescrever.
+3. **Cada seção tem prova imediata?** Claim sem prova na mesma tela = objeção aberta.
+4. **O copy usa linguagem do avatar ou do produto?** Avatar ganha sempre.
+5. **CTA diz exatamente o que acontece ao clicar?** Se não, reescrever.
+6. **O preço aparece só depois do stack de valor?** Se não, mover.
+7. **Pergunta final de Carlton:** "Isso gera o pedido?" Se não tiver certeza — é não. Reescrever.
