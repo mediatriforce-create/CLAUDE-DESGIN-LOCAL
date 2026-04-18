@@ -366,10 +366,13 @@ Após terminar o HTML, abrir no browser E rodar o servidor local:
 
 ```bash
 # Abrir direto no browser (sem servidor)
+# Windows:
 start "C:\caminho\para\design.html"
+# macOS/Linux:
+open "/caminho/para/design.html"
 
 # Abrir com servidor local (com live reload, Tweaks, element picker)
-python "C:\Users\media\.claude\skills\claude-design\server.py" "C:\caminho\para\design.html"
+python server.py "C:\caminho\para\design.html"
 ```
 
 O servidor injeta automaticamente:
@@ -388,10 +391,10 @@ Após o `done`, rodar o verificador:
 
 ```bash
 # Verificação de layout/CSS/HTML
-python "C:\Users\media\.claude\skills\claude-design\verify.py" "C:\caminho\para\design.html"
+python verify.py "C:\caminho\para\design.html"
 
 # Verificação + screenshot desktop e mobile (requer playwright)
-python "C:\Users\media\.claude\skills\claude-design\verify.py" "C:\caminho\para\design.html" --screenshot --url http://localhost:8765
+python verify.py "C:\caminho\para\design.html" --screenshot --url http://localhost:8765
 ```
 
 O verificador checa:
@@ -988,7 +991,7 @@ Rodar mentalmente antes de salvar o arquivo final.
 
 **Rodar o verificador:**
 ```bash
-python "C:\Users\media\.claude\skills\claude-design\verify.py" "design.html" --screenshot
+python verify.py "design.html" --screenshot
 ```
 
 ---

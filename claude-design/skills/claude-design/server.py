@@ -12,8 +12,8 @@ Funcionalidades:
   ✓ Auto-abre browser
 
 Uso:
-  python server.py "C:/caminho/para/design.html"
-  python server.py "C:/caminho/para/design.html" --port 8765
+  python server.py "caminho/para/design.html"
+  python server.py "caminho/para/design.html" --port 8765
 
 Requisitos opcionais (para screenshot/PDF):
   pip install playwright
@@ -53,7 +53,6 @@ INJECT_SCRIPT = """
   _src.onerror   = function() { setTimeout(function(){ location.reload(); }, 1000); };
 
   // 2. Tweaks persistence
-  // Interceptar window.parent.postMessage e window.postMessage
   function interceptPostMessage(obj) {
     if (!obj || typeof obj.postMessage !== 'function') return;
     var orig = obj.postMessage.bind(obj);
@@ -95,16 +94,20 @@ INJECT_SCRIPT = """
       var a = el.attributes[i];
       if (a.name.indexOf('data-') === 0) dataAttrs[a.name] = a.value;
     }
+    // React Fiber traversal com limite de profundidade
     var reactChain = [];
     try {
       var fiberKey = Object.keys(el).find(function(k){ return k.startsWith('__reactFiber'); });
       if (fiberKey) {
         var fiber = el[fiberKey];
-        while (fiber) {
+        var depth = 0;
+        var maxDepth = 20;
+        while (fiber && depth < maxDepth) {
           if (fiber.type && typeof fiber.type === 'function' && fiber.type.name) {
             reactChain.push(fiber.type.name);
           }
           fiber = fiber.return;
+          depth++;
         }
       }
     } catch(e) {}
@@ -164,7 +167,7 @@ INJECT_SCRIPT = """
     }
   };
 
-  // 5. Anunciar Tweaks disponível (para páginas que não fazem isso sozinhas)
+  // 5. Anunciar Tweaks disponível
   setTimeout(function() {
     window.postMessage({ type: '__edit_mode_available' }, '*');
   }, 200);
@@ -188,14 +191,15 @@ def watch_file():
                 if LAST_MODIFIED and mtime != LAST_MODIFIED:
                     with SSE_LOCK:
                         dead = []
-                        for client in SSE_CLIENTS:
+                        for client in list(SSE_CLIENTS):
                             try:
                                 client.wfile.write(b"data: reload\n\n")
                                 client.wfile.flush()
                             except:
                                 dead.append(client)
                         for d in dead:
-                            SSE_CLIENTS.remove(d)
+                            if d in SSE_CLIENTS:
+                                SSE_CLIENTS.remove(d)
                 LAST_MODIFIED = mtime
         except:
             pass
@@ -212,6 +216,8 @@ def apply_tweaks(edits: dict) -> bool:
         current = json.loads(match.group(2))
         current.update(edits)
         new_json = json.dumps(current, ensure_ascii=False, separators=(', ', ': '))
+        # Validar JSON antes de escrever no disco
+        json.loads(new_json)
         new_content = content[:match.start(2)] + new_json + content[match.end(2):]
         DESIGN_FILE.write_text(new_content, encoding='utf-8')
         return True
@@ -226,15 +232,17 @@ def playwright_action(action: str) -> Optional[bytes]:
         from playwright.sync_api import sync_playwright
         with sync_playwright() as p:
             browser = p.chromium.launch()
-            page = browser.new_page(viewport={'width': 1440, 'height': 900})
-            page.goto(f'http://localhost:{PORT}/', wait_until='networkidle')
-            page.wait_for_timeout(600)
-            if action == 'pdf':
-                data = page.pdf(format='A4', print_background=True)
-            else:
-                data = page.screenshot(full_page=True)
-            browser.close()
-            return data
+            try:
+                page = browser.new_page(viewport={'width': 1440, 'height': 900})
+                page.goto(f'http://localhost:{PORT}/', wait_until='networkidle')
+                page.wait_for_timeout(600)
+                if action == 'pdf':
+                    data = page.pdf(format='A4', print_background=True)
+                else:
+                    data = page.screenshot(full_page=True)
+                return data
+            finally:
+                browser.close()
     except ImportError:
         return None
     except Exception as e:
@@ -267,6 +275,25 @@ def call_claude_api(body: dict) -> dict:
             return {'text': data['content'][0]['text']}
     except Exception as e:
         return {'error': str(e)}
+
+# ── Extensões permitidas para arquivos estáticos ──────────────────────────────
+ALLOWED_EXTENSIONS = {
+    '.js', '.jsx', '.css', '.png', '.jpg', '.jpeg', '.gif',
+    '.svg', '.woff2', '.woff', '.ttf', '.otf', '.json', '.html'
+}
+
+MIME_MAP = {
+    '.js':   'text/javascript',
+    '.jsx':  'text/javascript',
+    '.css':  'text/css',
+    '.png':  'image/png',
+    '.jpg':  'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.gif':  'image/gif',
+    '.svg':  'image/svg+xml',
+    '.json': 'application/json',
+    '.html': 'text/html; charset=utf-8',
+}
 
 # ── Request handler ───────────────────────────────────────────────────────────
 class DesignHandler(http.server.BaseHTTPRequestHandler):
@@ -350,9 +377,10 @@ class DesignHandler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(pdf)
             else:
-                err = b'{"error":"playwright nao instalado"}'
+                err = b'{"error":"playwright nao instalado. Execute: pip install playwright && playwright install chromium"}'
                 self.send_response(503)
                 self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Length', str(len(err)))
                 self.end_headers()
                 self.wfile.write(err)
             return
@@ -376,12 +404,21 @@ class DesignHandler(http.server.BaseHTTPRequestHandler):
                 self.send_error(500, str(e))
             return
 
-        # Outros arquivos do mesmo diretório
-        fp = DESIGN_FILE.parent / path.lstrip('/')
-        if fp.exists() and fp.is_file() and fp.suffix in ('.js', '.jsx', '.css', '.png', '.jpg', '.svg', '.woff2', '.woff', '.ttf'):
+        # Outros arquivos do mesmo diretório — com proteção contra path traversal
+        raw_path = path.lstrip('/')
+        allowed_root = DESIGN_FILE.parent.resolve()
+        fp = (allowed_root / raw_path).resolve()
+
+        # Garantir que o arquivo está dentro do diretório permitido
+        try:
+            fp.relative_to(allowed_root)
+        except ValueError:
+            self.send_error(403, 'Acesso negado')
+            return
+
+        if fp.exists() and fp.is_file() and fp.suffix in ALLOWED_EXTENSIONS:
             data = fp.read_bytes()
-            mime = {'.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png',
-                    '.jpg': 'image/jpeg', '.svg': 'image/svg+xml'}.get(fp.suffix, 'application/octet-stream')
+            mime = MIME_MAP.get(fp.suffix, 'application/octet-stream')
             self.send_response(200)
             self.send_header('Content-Type', mime)
             self.send_header('Content-Length', str(len(data)))
@@ -414,15 +451,15 @@ class DesignHandler(http.server.BaseHTTPRequestHandler):
         # Element capture
         if path == '/api/element':
             LAST_ELEMENT = body
-            print(f'\n  ╔═ element captured ══════════════════════')
-            print(f'  ║  dom:    {body.get("dom", "")[:60]}')
+            print(f'\n  \u2554\u2550 element captured \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550')
+            print(f'  \u2551  dom:    {body.get("dom", "")[:60]}')
             if body.get('react'):
-                print(f'  ║  react:  {" > ".join(body["react"][:4])}')
-            print(f'  ║  tag:    {body.get("tag", "")}')
-            print(f'  ║  text:   {body.get("text", "")[:60]}')
+                print(f'  \u2551  react:  {" > ".join(body["react"][:4])}')
+            print(f'  \u2551  tag:    {body.get("tag", "")}')
+            print(f'  \u2551  text:   {body.get("text", "")[:60]}')
             if body.get('screenLabel'):
-                print(f'  ║  slide:  {body.get("screenLabel")}')
-            print(f'  ╚══════════════════════════════════════════\n')
+                print(f'  \u2551  slide:  {body.get("screenLabel")}')
+            print(f'  \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n')
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self._cors()
@@ -457,10 +494,15 @@ if __name__ == '__main__':
         sys.exit(1)
 
     if '--port' in sys.argv:
+        idx = sys.argv.index('--port')
+        if idx + 1 >= len(sys.argv):
+            print('[erro] --port requer um valor. Ex: --port 3000')
+            sys.exit(1)
         try:
-            PORT = int(sys.argv[sys.argv.index('--port') + 1])
-        except:
-            pass
+            PORT = int(sys.argv[idx + 1])
+        except ValueError:
+            print(f'[erro] --port deve ser um número inteiro, recebido: {sys.argv[idx+1]}')
+            sys.exit(1)
 
     LAST_MODIFIED = DESIGN_FILE.stat().st_mtime
     threading.Thread(target=watch_file, daemon=True).start()
@@ -472,18 +514,18 @@ if __name__ == '__main__':
 
     with ReusableTCPServer(('localhost', PORT), DesignHandler) as httpd:
         print()
-        print('  ╔══════════════════════════════════════════════════════╗')
-        print('  ║        claude-design server                          ║')
-        print('  ╠══════════════════════════════════════════════════════╣')
-        print(f'  ║  arquivo : {str(DESIGN_FILE.name):<42} ║')
-        print(f'  ║  url     : {url:<42} ║')
-        print('  ╠══════════════════════════════════════════════════════╣')
-        print('  ║  Ctrl+Click elemento → captura DOM para o Claude     ║')
-        print('  ║  Tweaks → reescrevem o arquivo em disco              ║')
-        print('  ║  Edite o HTML → browser recarrega automaticamente    ║')
-        print('  ║  /api/screenshot → PNG da página completa            ║')
-        print('  ║  /api/export/pdf → PDF da página (requer playwright) ║')
-        print('  ╚══════════════════════════════════════════════════════╝')
+        print('  \u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557')
+        print('  \u2551        claude-design server                          \u2551')
+        print('  \u2560\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2563')
+        print(f'  \u2551  arquivo : {str(DESIGN_FILE.name):<42} \u2551')
+        print(f'  \u2551  url     : {url:<42} \u2551')
+        print('  \u2560\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2563')
+        print('  \u2551  Ctrl+Click elemento \u2192 captura DOM para o Claude     \u2551')
+        print('  \u2551  Tweaks \u2192 reescrevem o arquivo em disco              \u2551')
+        print('  \u2551  Edite o HTML \u2192 browser recarrega automaticamente    \u2551')
+        print('  \u2551  /api/screenshot \u2192 PNG da página completa            \u2551')
+        print('  \u2551  /api/export/pdf \u2192 PDF (requer playwright)           \u2551')
+        print('  \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d')
         print()
         webbrowser.open(url)
         try:
