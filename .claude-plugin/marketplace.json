@@ -1,0 +1,15 @@
+{
+  "name": "mediatriforce-create",
+  "owner": {
+    "name": "mediatriforce-create",
+    "url": "https://github.com/mediatriforce-create"
+  },
+  "plugins": [
+    {
+      "name": "claude-design",
+      "source": "./claude-design",
+      "description": "Emula o Claude Design dentro do Claude Code — intake inteligente, HTML ship-ready, Tweaks, 6 starters, server com live reload e verificador automático.",
+      "version": "1.0.0"
+    }
+  ]
+}
