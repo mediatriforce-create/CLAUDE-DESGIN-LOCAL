@@ -191,7 +191,7 @@ Always use these pinned versions with integrity hashes. Never use unpinned versi
 
 ## 4. Starter Components
 
-These are pre-built components stored in `<plugin-dir>/skills/claude-design/starters/`. Paste their content into the HTML project when needed.
+These are pre-built components stored in `C:\Users\media\.claude\skills\claude-design\starters\`. Paste their content into the HTML project when needed.
 
 | Starter | When to use |
 |---|---|
@@ -369,7 +369,7 @@ Após terminar o HTML, abrir no browser E rodar o servidor local:
 start "C:\caminho\para\design.html"
 
 # Abrir com servidor local (com live reload, Tweaks, element picker)
-python "server.py" "C:\caminho\para\design.html"
+python "C:\Users\media\.claude\skills\claude-design\server.py" "C:\caminho\para\design.html"
 ```
 
 O servidor injeta automaticamente:
@@ -388,10 +388,10 @@ Após o `done`, rodar o verificador:
 
 ```bash
 # Verificação de layout/CSS/HTML
-python "verify.py" "C:\caminho\para\design.html"
+python "C:\Users\media\.claude\skills\claude-design\verify.py" "C:\caminho\para\design.html"
 
 # Verificação + screenshot desktop e mobile (requer playwright)
-python "verify.py" "C:\caminho\para\design.html" --screenshot --url http://localhost:8765
+python "C:\Users\media\.claude\skills\claude-design\verify.py" "C:\caminho\para\design.html" --screenshot --url http://localhost:8765
 ```
 
 O verificador checa:
@@ -583,6 +583,28 @@ button { cursor: pointer; border: none; background: none; }
 - Nunca usar valores mágicos no CSS — sempre `var(--token)`
 - Cores derivadas com `oklch()`: `oklch(from var(--c-accent) calc(l * 0.85) c h)` para hover automático
 - Tipografia fluid via `clamp()` — nunca `px` fixo para `font-size`
+- **NUNCA usar Syne+Inter por padrão** — escolher fonte baseado no feeling (ver Seção 16b)
+
+---
+
+## 16b. Tipografia — Escolha por Feeling (OBRIGATÓRIO)
+
+**Nunca repetir a mesma combinação de fontes em projetos diferentes.** A fonte é parte do design system. Escolher baseado no feeling de Q3.
+
+| Feeling | Headline | Body | @import |
+|---|---|---|---|
+| Late-night cinematográfico | `Bebas Neue` ou `Anton` | `DM Sans` | Bebas+Neue:wght@400&family=DM+Sans:wght@400;500 |
+| Editorial quente | `Playfair Display` | `Lora` | Playfair+Display:ital,wght@0,700;1,400&family=Lora:wght@400 |
+| Produto de luxo | `Cormorant Garamond` | `Jost` | Cormorant+Garamond:wght@600;700&family=Jost:wght@300;400 |
+| Playful e cinético | `Syne` ou `Space Grotesk` | `Plus Jakarta Sans` | Syne:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600 |
+| Clínico e técnico | `IBM Plex Mono` | `IBM Plex Sans` | IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;500 |
+| Artesanal e humano | `Fraunces` | `Newsreader` | Fraunces:ital,wght@0,700;1,400&family=Newsreader:wght@400 |
+| Esportivo/atlético | `Barlow Condensed` | `Barlow` | Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500 |
+| Startup/tech | `Geist` ou `Outfit` | `Inter` | Outfit:wght@700;900&family=Inter:wght@400;500 |
+
+**Se Q4 especificou fonte:** usar essa, não a tabela acima.
+**Se Q3 foi "outro":** escolher a combinação mais distante das usadas recentemente.
+**Regra absoluta:** cada projeto tem uma identidade tipográfica única.
 
 ---
 
@@ -966,7 +988,7 @@ Rodar mentalmente antes de salvar o arquivo final.
 
 **Rodar o verificador:**
 ```bash
-python "verify.py" "design.html" --screenshot
+python "C:\Users\media\.claude\skills\claude-design\verify.py" "design.html" --screenshot
 ```
 
 ---
