@@ -15,80 +15,140 @@ Você é um expert designer. Seu output é sempre um único HTML self-contained 
 
 **Se o pedido for vago (sem brief completo), rodar o intake abaixo.** Se o pedido já tiver: tipo de output, feeling, brand colors E estrutura → pular direto para a Seção 1 e construir.
 
-O intake é uma entrevista rápida via `AskUserQuestion`. Uma pergunta por vez. Tom direto, sem enrolação.
+**Formato obrigatório:** Apresentar cada pergunta com opções **numeradas**. O usuário digita só o número — sem precisar escrever texto longo. Sempre deixar uma opção "Outro — descreva" no final. Tom direto, zero enrolação.
+
+---
 
 ### Q1 — O que você está criando?
 
-Opções (apresentar como lista):
-- Landing page (one-pager para produto, serviço ou oferta)
-- Pitch deck / apresentação
-- Scroll-driven storytelling site (atos, reveals, scroll cinematográfico)
-- Protótipo clicável de mobile app
-- Site de marketing (multi-seção, editorial)
-- Dashboard ou UI de admin
-- Animação / vídeo-style output
-- Outro (descreva)
+```
+1  Landing page — produto, serviço ou oferta
+2  Pitch deck / apresentação
+3  Scroll storytelling — atos, reveals cinematográficos
+4  Protótipo clicável de mobile app
+5  Site de marketing multi-seção
+6  Dashboard ou UI de admin
+7  Animação / vídeo-style output
+8  Outro — descreva
+```
 
-### Q2 — Em uma frase: para quê serve e para quem é?
+---
 
-Texto livre. Exemplo: *"Uma ferramenta de foco noturno para founders solo que odeiam ruído."*
+### Q2 — Qual é o arquétipo? (se for LP ou site)
 
-### Q3 — Que feeling deve transmitir? (um dominante + até 2 secundários)
+Isso define a estrutura de seções automaticamente (ver Seção 27).
 
-- Late-night cinematográfico (escuro, confiante, A24)
-- Editorial quente (revista impressa, off-white, serif)
-- Produto de luxo (Apple keynote, minimal, fotográfico)
-- Playful e cinético (cores vivas, motion, jovem)
-- Clínico e técnico (Bloomberg terminal, denso, preciso)
-- Artesanal e humano (notebook, imperfeito, manuscrito)
-- Outro (descreva)
+```
+1  SaaS / Software — trial, demo, features, pricing
+2  Produto físico / e-commerce — desejo sensorial, compra
+3  Serviço / agência — autoridade, processo, cases
+4  Evento / webinar — inscrição, speakers, agenda
+5  App mobile — download, screenshots, reviews
+6  Curso / info-produto — transformação, currículo, garantia
+7  Startup early-stage — missão, produto, waitlist
+8  Outro / não sei — você decide baseado no Q3
+```
 
-### Q4 — Brand system: cores e tipografia?
+---
 
-Formato: `primária #hex, accent #hex, neutro #hex, fonte headline, fonte body`
-Exemplo: *"coral #E07A4F, cream #F4F0EA, near-black #0a0a0f, serif itálico headline, geométrico sans body"*
+### Q3 — Tom visual dominante?
 
-Se não tiver: perguntar *"que cor representa o feeling?"* e interpretar.
+```
+1  Dark tech — preto/cinza, neon, enterprise/gaming
+2  Light minimal — branco puro, muito espaço, tipografia dominante
+3  Bold colorful — cor saturada principal, energia alta, jovem
+4  Editorial — foto grande, serif, assimétrico, revista
+5  Luxury — minimal fotográfico, dourado/bege, Apple-like
+6  Playful — ilustração, pastéis ou vibrantes, arredondado
+7  Artesanal — grain, imperfeito, manuscrito, humano
+8  Clínico/técnico — monospace, grid denso, Bloomberg
+9  Outro — descreva
+```
 
-### Q5 — Quantas variações e em que eixo?
+---
 
-- 3 variações, mesmo vibe, layouts diferentes
-- 4 variações de conservador a ousado
-- 6 variações explorando dimensões (cor / tipo / motion / estrutura)
-- 1 design final, sem variações
-- Outro
+### Q4 — Framework de copy?
 
-### Q6 — Quais seções / telas são obrigatórias?
+Define como cada seção vai ser escrita (ver Seção 28).
 
-Texto livre. Exemplo para LP: *"hero com headline única, 3 benefícios, prova social, oferta, CTA WhatsApp, localização"*
-Exemplo para deck: *"7 slides: título, problema, solução, tração, equipe, próximos passos, CTA"*
+```
+1  PAS — Problema, Agitação, Solução (dor visceral → alívio)
+2  BAB — Antes, Depois, Bridge (transformação clara)
+3  AIDA — Atenção, Interesse, Desejo, Ação (clássico)
+4  StoryBrand — cliente é o herói, produto é o guia
+5  PASTOR — longo, curso/high-ticket, história do criador
+6  FAB — Features → Advantages → Benefits (produto físico)
+7  4Ps — Picture, Promise, Prove, Push (premium)
+8  Você decide o melhor para o contexto
+```
 
-### Q7 — O que NÃO deve ter?
+---
 
-- Sem lorem ipsum (sempre incluir isso)
-- Sem gradient blobs e orbes flutuantes
-- Sem linguagem corporativa
-- Sem referências a marcas concorrentes
-- Outros (escreva)
+### Q5 — Brand system?
 
-### Q8 — Tweaks para expor no painel?
+```
+Formato: cor-principal #hex, accent #hex, fundo #hex, fonte-headline, fonte-body
+Exemplo: coral #E07A4F, cream #F4F0EA, #0a0a0f, Playfair Display, Lora
 
-Quais dimensões o usuário vai querer ajustar depois sem re-prompts?
-Exemplos: cor accent, copy do headline, intensidade do dark mode, densidade, variante de layout.
+→ Se não tiver, digitar só a cor que representa a marca e eu invento o resto.
+→ Se não tiver nada, digitar 0 e eu crio um brand system do zero baseado no Q3.
+```
+
+---
+
+### Q6 — Seções obrigatórias?
+
+```
+→ Descreva livremente ou digitar 0 para usar a estrutura padrão do arquétipo (Q2).
+Exemplo: "hero impactante, 3 benefícios visuais, depoimento, CTA WhatsApp"
+```
+
+---
+
+### Q7 — O que PROIBIR no design?
+
+```
+1  Sem cards quadradinhos genéricos com borda e hover
+2  Sem gradient blobs / orbes flutuantes
+3  Sem linguagem corporativa ("soluções inovadoras")
+4  Sem stock photos genéricas
+5  Sem hero centralizado com subhead + botão (o mais batido)
+6  Outro — descreva
+→ Pode combinar: "1,2,5" ou "tudo acima"
+```
+(Sem lorem ipsum é sempre proibido — não precisa mencionar.)
+
+---
+
+### Q8 — Tweaks a expor?
+
+```
+1  Cor accent (color picker)
+2  Headline principal (input de texto)
+3  Dark / Light mode (toggle)
+4  Intensidade de efeito/glow (slider)
+5  Variante de layout (A/B toggle entre 2 estruturas)
+6  Outro — descreva
+→ Pode combinar: "1,2,3"
+```
 
 ---
 
 ### Após o intake: construir imediatamente
 
-Depois de coletar Q1–Q8, **não gerar um prompt para colar em outro lugar** — construir o HTML direto usando as seções abaixo. O brief coletado alimenta a Seção 1 (Design Process). Usar as respostas como:
+Depois de coletar Q1–Q8, **não gerar um prompt — construir o HTML direto.**
 
+Mapeamento das respostas:
 - Q1 → tipo de output → Stack Decision Tree (Seção 14)
-- Q2+Q3 → feeling e audiência → escolha tipográfica e paleta
-- Q4 → brand system → CSS variables
-- Q5 → nº de variações → estrutura de seções ou Tweaks toggles
-- Q6 → estrutura do HTML
-- Q7 → lista de banned elements
-- Q8 → painel Tweaks (`/*EDITMODE-BEGIN*/.../*EDITMODE-END*/`)
+- Q2 → arquétipo → estrutura de seções (Seção 27)
+- Q3 → tom visual → paleta + tipografia (Seção 16b) + tom visual (Seção 26)
+- Q4 → framework de copy → como escrever cada seção (Seção 28)
+- Q5 → brand system → CSS variables
+- Q6 → seções obrigatórias → estrutura do HTML
+- Q7 → banned elements → lista de proibições
+- Q8 → painel Tweaks → `/*EDITMODE-BEGIN*/.../*EDITMODE-END*/`
+
+**Garantia de diversidade:** antes de construir, escolher combinação de layouts (Seção 26) que nunca repita o padrão de LPs anteriores. Cada LP deve usar pelo menos 3 padrões de layout diferentes entre suas seções.
 
 ---
 
@@ -1125,3 +1185,240 @@ Ao montar uma LP de 6 seções, usar combinações como:
 - **Pedir Tweaks específicos** — dizer quais dimensões expor no painel (cor, tipografia, densidade, copy)
 - **Modelo mais capaz para draft inicial** — Claude Opus 4.7 (ou o mais potente disponível) para o rascunho, pode iterar com modelos mais rápidos depois
 - **Fonte confiável de starters:** `VoltAgent/awesome-claude-design` no GitHub
+
+---
+
+## 27. Arquétipos de LP — Estrutura de Seções por Tipo
+
+Usar como base quando Q2 do AUTO-BRIEF define o arquétipo. Adaptar, nunca copiar exatamente.
+
+### Arquétipo 1: SaaS / Software
+**Copy framework ideal:** PAS ou BAB | **Visual:** dark-tech ou light-minimal
+```
+1. Hero — headline narrativo + CTA duplo (trial / demo) + product preview
+2. Logo bar — clientes conhecidos (social proof imediato, sem texto)
+3. Problema → diagrama ou visual da dor (antes do produto)
+4. Feature showcase — UI real do produto em contexto de uso
+5. Como funciona — 3 passos (timeline ou lista numerada grande)
+6. Bento grid de features secundárias
+7. Integrações — grid de ícones de ferramentas compatíveis
+8. Testimonials — foto + cargo + métrica de resultado específica
+9. Pricing — com toggle mensal/anual
+10. FAQ — objeções reais
+11. CTA final — urgência leve, sem cartão de crédito
+```
+
+### Arquétipo 2: Produto Físico / E-commerce
+**Copy framework ideal:** FAB ou 4Ps | **Visual:** bold-colorful ou editorial
+```
+1. Hero — produto em uso em contexto real (não fundo branco)
+2. Value prop — 3 colunas sem card (ícone + título + frase curta)
+3. Product showcase — scroll horizontal ou rotativo
+4. Benefícios detalhados — FAB por feature principal
+5. Lifestyle — fotos autênticas (usuários reais, não modelos genéricos)
+6. Comparativo — nós vs. alternativa mais óbvia (tabela ou visual)
+7. Reviews / UGC — com fotos de clientes reais
+8. Oferta / bundle
+9. Garantia + política de devolução (remove risco)
+10. CTA final com urgência real (estoque, prazo)
+```
+
+### Arquétipo 3: Serviço / Agência
+**Copy framework ideal:** StoryBrand ou PASTOR | **Visual:** editorial ou luxury
+```
+1. Hero — transformação (BAB em 1 headline)
+2. Para quem é — personas / segmentos atendidos
+3. Processo — timeline horizontal ou zigzag (etapas reais, não genéricas)
+4. Cases — resultado específico por cliente (métrica + setor)
+5. Equipe — foto editorial real, não stock. Nome + especialidade
+6. Serviços — expandíveis ou tabs (sem listar tudo plano)
+7. Diferenciais — vs. concorrência ou vs. fazer interno
+8. Credibilidade — prêmios, press, certificações
+9. CTA — formulário inline ou calendário de agendamento
+10. FAQ
+```
+
+### Arquétipo 4: Evento / Webinar
+**Copy framework ideal:** AIDA com urgência | **Visual:** bold-colorful ou dark-tech
+```
+1. Hero — data + local + headline do tema + countdown timer
+2. Speakers — foto + nome + título + tema da palestra
+3. O que você vai aprender — outcomes concretos (verbos de ação)
+4. Agenda — schedule visual
+5. Sobre os organizadores — credibilidade
+6. Edições anteriores — fotos ou depoimentos
+7. Patrocinadores
+8. FAQ — online vs. presencial, gravação, reembolso
+9. CTA — contador de vagas restantes
+```
+
+### Arquétipo 5: App Mobile
+**Copy framework ideal:** BAB | **Visual:** qualquer, reflete identidade do app
+```
+1. Hero — mockup de device + headline + badges App Store/Play
+2. Features principais — scroll horizontal, uma por vez
+3. Screenshots — galeria da interface real
+4. Prova social — rating, downloads, reviews das stores
+5. Antes/Depois — problema → solução em visual comparativo
+6. Como funciona — 3 passos com animação CSS
+7. Privacidade / segurança (essencial para saúde, finanças)
+8. CTA duplo — iOS + Android
+```
+
+### Arquétipo 6: Curso / Info-produto
+**Copy framework ideal:** PASTOR (longo) | **Visual:** artesanal ou editorial
+```
+1. Hero — transformação visceral (PAS ou BAB)
+2. Para quem é — qualificação (e para quem NÃO é)
+3. O problema em detalhe — agitação emocional
+4. O que você recebe — currículo / módulos / bônus
+5. Sobre o criador — história pessoal + autoridade
+6. Resultados de alunos — screenshots reais, não depoimentos genéricos
+7. Bônus exclusivos
+8. Garantia — dinheiro de volta sem questionamento
+9. Pricing com urgência
+10. CTA + FAQ de objeções reais
+```
+
+### Arquétipo 7: Startup Early-Stage / Waitlist
+**Copy framework ideal:** StoryBrand | **Visual:** minimal ou dark-tech
+```
+1. Hero — missão em 1 frase + formulário de waitlist inline
+2. O problema que existe — visual ou dado surpreendente
+3. Como vai funcionar — teaser do produto (não precisa mostrar tudo)
+4. Quem está construindo — founders com credibilidade real
+5. Early adopters — logos ou nomes de quem já entrou
+6. CTA final — urgência de acesso early + benefício exclusivo
+```
+
+---
+
+## 28. Frameworks de Copy — Como Aplicar por Seção
+
+### PAS — Problema, Agitação, Solução
+```
+PROBLEMA:  Headline que nomeia a dor com precisão cirúrgica
+AGITAÇÃO:  Subhead ou parágrafo que amplifica as consequências
+SOLUÇÃO:   "É por isso que criamos [Produto]" + CTA
+```
+**Onde usar:** hero de produto que resolve dor conhecida. Audiência problem-aware.
+**Headline exemplo:** "Você perde 3h por dia em planilhas que ninguém mais lê."
+
+---
+
+### BAB — Before, After, Bridge
+```
+BEFORE:  Estado atual indesejável (específico, não genérico)
+AFTER:   Estado desejável futuro (concreto, sensorial)
+BRIDGE:  [Produto] é o que leva de um ao outro
+```
+**Onde usar:** hero de qualquer produto com transformação clara.
+**Headline exemplo:** "Antes: reuniões que poderiam ser email. Depois: semanas de 4 dias."
+
+---
+
+### AIDA
+```
+ATTENTION:  Headline que interrompe (dado chocante, pergunta, provocação)
+INTEREST:   Contexto que mantém lendo (por que isso importa)
+DESIRE:     Benefício emocional + prova social
+ACTION:     CTA único e direto
+```
+**Onde usar:** hero simples, evento, oferta com deadline.
+
+---
+
+### StoryBrand (7 partes)
+```
+1. CHARACTER:  O cliente é o herói com um problema
+2. PROBLEM:    Problema externo (funcional) + interno (emocional) + filosófico
+3. GUIDE:      Sua marca como guia com empatia + autoridade
+4. PLAN:       Plano de 3 passos simples
+5. CTA:        Chamada clara à ação
+6. FAILURE:    O que acontece se não agir (custo da inação)
+7. SUCCESS:    Visão da vida transformada
+```
+**Onde usar:** homepage, serviço complexo, high-ticket, marcas com propósito.
+**Regra crítica:** nunca posicione a marca como herói. O cliente é Luke Skywalker, sua marca é Yoda.
+
+---
+
+### PASTOR (long-form)
+```
+P — PROBLEM:      Nomeia e amplifica o problema
+A — AMPLIFY:      Urgência: o que acontece se não resolver agora
+S — STORY:        História real de transformação (criador ou cliente)
+T — TRANSFORMATION: Prova visual do resultado
+O — OFFER:        O que está incluído, bônus, garantia
+R — RESPONSE:     CTA com urgência
+```
+**Onde usar:** LP longa de curso, high-ticket, consultoria. Cada letra = uma seção completa.
+
+---
+
+### FAB — Features, Advantages, Benefits
+```
+FEATURE:    O que é (técnico, objetivo)
+ADVANTAGE:  O que faz (funcional)
+BENEFIT:    O que significa para você (emocional, pessoal)
+
+Ex: "Bateria de 48h" → "Carrega o dia inteiro" → "Você nunca para por falta de bateria"
+```
+**Onde usar:** seção de features de produto físico ou software com specs.
+
+---
+
+### 4U Formula — Checklist de Headline
+Todo headline deve ser:
+- **Useful** — entrega valor claro
+- **Urgent** — por que agir agora
+- **Unique** — diferente de todo concorrente
+- **Ultra-specific** — número, prazo, resultado concreto
+
+**Ruim:** "Aumente sua produtividade"
+**Bom:** "Dobre seu output em 7 dias sem mudar de ferramenta"
+
+---
+
+### Custo da Inação (seção opcional poderosa)
+Seção que mostra o que o visitante **perde** se não agir. Inversão do benefício.
+```html
+<!-- Estrutura da seção -->
+<section class="cost">
+  <h2>O que custa não resolver isso</h2>
+  <!-- lista de consequências específicas e mensuráveis -->
+  <!-- não assusta — torna real o custo de manter o status quo -->
+</section>
+```
+
+---
+
+## 29. Sistema de 5 Eixos — Garantia de Diversidade Visual
+
+Toda LP deve combinar 1 opção de cada eixo. Combinando os eixos: mais de 7.500 variações únicas.
+
+**Eixo 1 — Tom visual** (Q3 do AUTO-BRIEF)
+`dark-tech / light-minimal / bold-colorful / editorial / luxury / playful / artesanal / técnico`
+
+**Eixo 2 — Layout do hero**
+`Isolated component / Bento grid / Split assimétrico / Centered minimal / Full-bleed / Lava layout / Tied-to-scroll / Split-screen`
+
+**Eixo 3 — Seção de feature principal**
+`Bento grid / Lista numerada grande / Screenshot carousel / Alternating text-image / Accordion / Tabs interativas / Demo embedada / Timeline`
+
+**Eixo 4 — Estilo de prova social**
+`Logo bar / Testimonial cards / Case study único / Stats bar animada / Reviews com foto / Quote hero dominante / Mapa de clientes`
+
+**Eixo 5 — Textura de fundo**
+`Gradiente mesh / Noise/grain overlay / Grid pattern sutil / SVG shapes / Stripes diagonais / Cor sólida limpa / Fotografia editorial`
+
+**Antes de construir:** anotar no comentário do HTML qual combinação está sendo usada:
+```html
+<!-- DESIGN AXES:
+  tom: dark-tech
+  hero: split-assimetrico
+  feature: bento-grid
+  prova: stats-bar
+  textura: noise-grain
+-->
+```
