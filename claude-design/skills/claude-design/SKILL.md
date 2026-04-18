@@ -964,6 +964,7 @@ Rodar mentalmente antes de salvar o arquivo final.
 - [ ] Nenhum botão dentro de `flex-direction: column` sem `align-self: flex-start`
 - [ ] Nenhuma `width` fixa > 1440px em elementos de conteúdo
 - [ ] Sem `position: absolute` para layout principal — só para overlays e decorações
+- [ ] Cada seção usa um padrão de layout diferente — sem repetir card grid em toda seção (ver Seção 26)
 
 **Tipografia:**
 - [ ] Hierarquia clara: h1 > h2 > h3, sem saltos
@@ -993,6 +994,125 @@ Rodar mentalmente antes de salvar o arquivo final.
 ```bash
 python verify.py "design.html" --screenshot
 ```
+
+---
+
+## 26. Layout Vocabulary — Sair dos Quadradinhos
+
+**Problema:** LPs geradas com o mesmo esqueleto — eyebrow + título + grid de cards com borda. Resultado: tudo igual, sem personalidade.
+
+**Regra:** cada seção de uma LP deve usar um padrão de layout diferente. Nunca repetir o mesmo padrão duas vezes na mesma página.
+
+### Anti-padrão proibido
+
+```css
+/* NÃO fazer isso em toda seção */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: 16px; padding: 32px; }
+```
+
+---
+
+### Padrões alternativos (usar um por seção)
+
+#### 1. Split horizontal com proporção assimétrica
+Texto grande de um lado, visual denso do outro. Não 50/50 — usar 60/40 ou 40/60.
+```css
+.split { display: grid; grid-template-columns: 3fr 2fr; gap: var(--s-16); align-items: center; }
+@media (max-width: 768px) { .split { grid-template-columns: 1fr; } }
+```
+
+#### 2. Lista numerada grande (sem cards)
+Números gigantes como elemento visual. Sem box, sem borda. Só tipografia e separador.
+```css
+.list-item { display: grid; grid-template-columns: 80px 1fr; gap: var(--s-8); padding: var(--s-8) 0; border-top: 1px solid var(--c-border); align-items: start; }
+.list-num { font-family: var(--f-headline); font-size: var(--t-3xl); color: var(--c-accent); opacity: 0.3; line-height: 1; }
+```
+
+#### 3. Texto editorial com pull quote
+Uma coluna de texto com uma citação ou stat grande interrompendo o fluxo — estilo revista.
+```css
+.editorial { max-width: 680px; margin-inline: auto; }
+.pull-quote { font-family: var(--f-headline); font-size: var(--t-3xl); line-height: 1.1; color: var(--c-accent); margin: var(--s-12) 0; padding-left: var(--s-8); border-left: 4px solid var(--c-accent); }
+```
+
+#### 4. Bento grid (células de tamanhos diferentes)
+Área de destaque grande + células menores ao redor. Sem todas as células iguais.
+```css
+.bento { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, auto); gap: var(--s-4); }
+.bento-lg { grid-column: span 2; grid-row: span 2; }
+.bento-md { grid-column: span 2; }
+.bento-sm { grid-column: span 1; }
+@media (max-width: 768px) { .bento, .bento-lg, .bento-md, .bento-sm { grid-column: span 4; } }
+```
+
+#### 5. Seção full-bleed com texto centralizado e grande
+Sem container, sem cards. Apenas texto enorme sobre fundo com textura ou cor sólida.
+```css
+.fullbleed { width: 100vw; margin-inline: calc(50% - 50vw); padding: var(--s-24) var(--s-8); text-align: center; background: var(--c-surface); }
+.fullbleed h2 { font-size: var(--t-4xl); max-width: 12ch; margin-inline: auto; }
+```
+
+#### 6. Timeline / zigzag
+Itens alternando lado (esquerda/direita) com linha central vertical.
+```css
+.timeline { position: relative; padding-left: 40px; }
+.timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--c-border); }
+.timeline-item { position: relative; padding: 0 0 var(--s-12) var(--s-8); }
+.timeline-item::before { content: ''; position: absolute; left: -44px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--c-accent); }
+@media (min-width: 768px) {
+  .timeline { padding: 0; }
+  .timeline-item:nth-child(odd) { padding-left: 55%; }
+  .timeline-item:nth-child(even) { padding-right: 55%; text-align: right; }
+  .timeline-item::before { left: 50%; transform: translateX(-50%); }
+}
+```
+
+#### 7. Marquee / ticker horizontal
+Logos, tags ou palavras em scroll infinito horizontal. Bom para prova social ou categorias.
+```css
+.marquee-wrap { overflow: hidden; border-top: 1px solid var(--c-border); border-bottom: 1px solid var(--c-border); padding: var(--s-4) 0; }
+.marquee-track { display: flex; gap: var(--s-8); width: max-content; animation: marquee 20s linear infinite; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+```
+HTML: duplicar os itens (para loop seamless).
+
+#### 8. Depoimento com citação dominante
+Em vez de cards de depoimento, uma citação ocupa 80% da tela. Uma por vez, com navegação discreta.
+```css
+.quote-hero { padding: var(--s-24) 0; text-align: center; }
+.quote-text { font-family: var(--f-headline); font-size: var(--t-3xl); max-width: 16ch; margin-inline: auto; line-height: 1.1; }
+.quote-author { margin-top: var(--s-8); font-size: var(--t-sm); color: var(--c-muted); }
+```
+
+#### 9. Stat bar / comparação visual
+Barras de progresso ou comparação — alternativa a números soltos.
+```css
+.stat-bar { display: flex; flex-direction: column; gap: var(--s-2); }
+.stat-bar-label { display: flex; justify-content: space-between; font-size: var(--t-sm); }
+.stat-bar-track { height: 6px; background: var(--c-border); border-radius: 3px; overflow: hidden; }
+.stat-bar-fill { height: 100%; background: var(--c-accent); border-radius: 3px; transition: width 1s var(--ease-out); }
+```
+
+#### 10. Hero com texto em camadas / overlap
+Headline enorme que sobrepõe uma imagem ou forma geométrica em SVG. Sem container quadrado.
+```css
+.hero-overlap { position: relative; min-height: 80vh; display: flex; align-items: flex-end; padding-bottom: var(--s-16); }
+.hero-bg-shape { position: absolute; inset: 0; z-index: 0; } /* SVG ou gradiente */
+.hero-overlap-content { position: relative; z-index: 1; }
+.hero-overlap h1 { font-size: clamp(4rem, 12vw, 12rem); line-height: 0.9; mix-blend-mode: difference; color: #fff; }
+```
+
+---
+
+### Regra de combinação por página
+
+Ao montar uma LP de 6 seções, usar combinações como:
+- Hero overlap → Stats (list numerada) → Feature (split assimétrico) → Prova (marquee + quote hero) → CTA (full-bleed)
+- Hero split → Bento grid → Timeline → Editorial com pull quote → CTA full-bleed
+- Hero texto centralizado enorme → List items com número grande → Depoimento quote dominant → Stats bar → CTA
+
+**Nunca:** hero split → cards → cards → cards → CTA. Isso é o padrão genérico que deve ser evitado.
 
 ---
 
